@@ -9,7 +9,8 @@ from iatilib.model import (
     Activity, Organisation, Transaction, Participation, SectorPercentage,
     CountryPercentage, Budget,
     Result, Indicator, IndicatorPeriod,
-    Location, DocumentLink, DocumentCategory
+    Location, DocumentLink, DocumentCategory,
+    RelatedActivity
 )
 from iatilib import codelists
 
@@ -41,6 +42,7 @@ def json_rep(obj):
     if isinstance(obj, Activity):
         return OrderedDict((
             ("iati-identifier", obj.iati_identifier),
+            ("hierarchy", obj.hierarchy),
             ("title", obj.title),
             ("description", obj.description),
             ("reporting-org", json_rep(obj.reporting_org)),
@@ -61,6 +63,7 @@ def json_rep(obj):
             ("result", [json_rep(r) for r in obj.results]),
             ("location", [json_rep(l) for l in obj.locations]),
             ("document-link", [json_rep(d) for d in obj.documents]),
+            ("related-activity", [json_rep(d) for d in obj.related_activities]),
 
         ),)
     if isinstance(obj, Organisation):
@@ -111,6 +114,12 @@ def json_rep(obj):
                 "currency": obj.value_currency.value,
                 "amount": str(obj.value_amount),
             }
+        }
+    if isinstance(obj, RelatedActivity):
+        return {
+            "text": obj.text,
+            "ref": obj.ref,
+            "type": code(obj.type), 
         }
     if isinstance(obj, DocumentLink):
         return {
