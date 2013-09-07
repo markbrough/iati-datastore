@@ -166,7 +166,7 @@ class IndicatorPeriod(db.Model):
 class Activity(db.Model):
     __tablename__ = "activity"
     iati_identifier = sa.Column(sa.Unicode, primary_key=True, nullable=False)
-    hierarchy = sa.Column(codelists.RelatedActivityType.db_type())
+    hierarchy = sa.Column(sa.Integer, nullable=True)
     default_language = sa.Column(codelists.Language.db_type())
     #parsed from xml iati-activity@last-updated-datetime
     last_updated_datetime = sa.Column(sa.DateTime, nullable=True)
@@ -320,6 +320,7 @@ class RelatedActivity(db.Model):
         index=True)
     ref = sa.Column(sa.Unicode(), nullable=False)
     text = sa.Column(sa.Unicode())
+    type = sa.Column(codelists.RelatedActivityType.db_type(), nullable=False, index=True)
     # i'd like to make this column a foreign key to activity, infact a self referential
     # relation would be nice but the standard allows a related-activity to have a type
     # which describes the type of relationship (parent, child, sibling etc) that makes
