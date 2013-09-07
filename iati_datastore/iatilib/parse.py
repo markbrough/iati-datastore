@@ -326,7 +326,8 @@ def related_activities(xml, resource=no_resource):
         text=xval(ele, "text()", None)
         try:
             ref = xval(ele, "@ref")
-            results.append(RelatedActivity(ref=ref, text=text))
+            type = from_codelist(cl.RelatedActivityType, "@type", ele, resource)
+            results.append(RelatedActivity(ref=ref, text=text, type=type))
         except MissingValue as e:
             iati_identifier = xval(xml, "/iati-activity/iati-identifier/text()", 'no_identifier')
             log.warn(
@@ -457,7 +458,11 @@ def resultsdata(xml, resource=no_resource):
 def hierarchy(xml, resource=None):
     xml_value = xval(xml, "@hierarchy", None)
     if xml_value:
-        return cl.RelatedActivityType.from_string(xml_value)
+        # hierarchy must be an int, but could be ""
+        try:
+            return int(xml_value)
+        except ValueError:
+            return None
     return None
 
 def last_updated_datetime(xml, resource=None):
