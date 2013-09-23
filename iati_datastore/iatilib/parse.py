@@ -381,12 +381,44 @@ def locations(xml, resource=no_resource):
     return locations
 
 def resultsdata(xml, resource=no_resource):
+
+    def cleanResultType(ele, resource):
+        rt = xval(ele, "@type", None)
+        if rt is None:
+            return cl.ResultType.from_string("1")
+        else:
+            if rt == 'Output':
+               return cl.ResultType.from_string("1")
+            else:
+                return from_codelist(cl.ResultType, "@type", ele, resource)
+
+    def cleanIndicatorMeasure(rele, resource):
+        rt = xval(rele, "@type", None)
+        if rt is None:
+            return cl.IndicatorMeasure.from_string("1")
+        else:
+            if rt == 'text':
+               return cl.IndicatorMeasure.from_string("1")
+            else:
+                return from_codelist(cl.IndicatorMeasure, "@measure", rele, resource)
+
+    def cleanTrueFalse(ele, xpath):
+        ags = xval(ele, xpath, None)
+        if ags == "1":
+            return True
+        elif ags == "0":
+            return False
+        elif ags == 'false':
+            return False
+        elif ags == 'true':
+            return True
+
     element = xml.xpath("./result")
     results = []
     for ele in element:
         rdata = {
-            "type": from_codelist(cl.ResultType, "@type", ele, resource),
-            "aggregation_status": xval(ele, '@aggregation-status', None),
+            "type": cleanResultType(ele, resource),
+            "aggregation_status": cleanTrueFalse(ele, '@aggregation-status'),
             "title": xval(ele, 'title/text()', u""),
             "description": xval(ele, 'description/text()', u""),
         }
@@ -401,8 +433,8 @@ def resultsdata(xml, resource=no_resource):
 
         for rele in result_element:
             idata = {
-                "measure": from_codelist(cl.IndicatorMeasure, "@measure", rele, resource),
-                "ascending": xval(rele, '@ascending', None),
+                "measure": cleanIndicatorMeasure(rele, resource),
+                "ascending": cleanTrueFalse(rele, '@ascending'),
                 "title": xval(rele, 'title/text()', u""),
                 "description": xval(rele, 'description/text()', u""),
                 "baseline_year": xpath_date('baseline/@year', rele, resource),
