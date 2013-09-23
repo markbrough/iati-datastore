@@ -204,7 +204,7 @@ def activity_default_currency(activity):
 class FieldDict(OrderedDict):
     common_field = {
         u"iati-identifier": iati_identifier,
-        u"hierarchy" :  partial(codelist_code, 'hierarchy'),
+        u"hierarchy" :  attrgetter(u'hierarchy'),
         u"last-updated-datetime": attrgetter(u'last_updated_datetime'),
         u"default-language" : partial(codelist_code, 'default_language'),
         u"reporting-org" : reporting_org_name,
