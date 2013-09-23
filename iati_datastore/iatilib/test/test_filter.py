@@ -256,9 +256,9 @@ class TestActivityFilter(AppTestCase):
 
     def test_related_activities(self):
         act_in = fac.ActivityFactory.create(
-                related_activities=[fac.RelatedActivityFactory.build(ref="ra-1")])
+                related_activities=[fac.RelatedActivityFactory.build(ref="ra-1", type=cl.RelatedActivityType.parent)])
         act_not = fac.ActivityFactory.create(
-                related_activities=[fac.RelatedActivityFactory.build(ref="ra-2")])
+                related_activities=[fac.RelatedActivityFactory.build(ref="ra-2", type=cl.RelatedActivityType.child)])
         activities = dsfilter.activities({
             "related-activity": u"ra-1"
         })
