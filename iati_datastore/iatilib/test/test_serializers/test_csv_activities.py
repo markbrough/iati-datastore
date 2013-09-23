@@ -364,7 +364,7 @@ class TestCSVExample(CSVTstMixin, TestCase):
 
     def test_hierarchy(self):
         data = self.process([fac.ActivityFactory.build(
-            hierarchy=cl.RelatedActivityType.parent
+            hierarchy=1
         )])
         self.assertField({'hierarchy': "1"}, data[0])
 
