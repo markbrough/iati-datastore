@@ -98,6 +98,8 @@ def nocomma_if_int(text):
         return int(text.replace(",",""))
     except ValueError:
         return None
+    except AttributeError:
+        return None
 
 def parse_org(xml, resource=no_resource):
     data = {
@@ -353,9 +355,6 @@ def documents(xml, resource=no_resource):
         for dele in doc_element:
             category_code = from_codelist(cl.DocumentCategory, "@code", dele, resource)
             ddata['documentcategories'].append(DocumentCategory(category=category_code))
-        if not ddata['documentcategories']:
-            ddata['documentcategories'] = None        
-
         d = DocumentLink()
         for attribute, value in ddata.items():
             setattr(d, attribute, value)
@@ -403,7 +402,7 @@ def resultsdata(xml, resource=no_resource):
         for rele in result_element:
             idata = {
                 "measure": from_codelist(cl.IndicatorMeasure, "@measure", rele, resource),
-                "ascending": xval(rele, '@ascending', 'None'),
+                "ascending": xval(rele, '@ascending', None),
                 "title": xval(rele, 'title/text()', u""),
                 "description": xval(rele, 'description/text()', u""),
                 "baseline_year": xpath_date('baseline/@year', rele, resource),
