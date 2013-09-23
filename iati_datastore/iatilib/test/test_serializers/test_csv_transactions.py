@@ -186,7 +186,7 @@ class TestCSVTransactionExample(TestCase, CSVTstMixin):
 
     def test_hierarchy(self):
         activity = fac.ActivityFactory.build(
-            hierarchy=cl.RelatedActivityType.parent
+            hierarchy=1
         )
         data = self.process([
             fac.TransactionFactory.build(activity=activity)
