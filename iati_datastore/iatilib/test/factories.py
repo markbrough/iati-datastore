@@ -59,6 +59,7 @@ class PolicyMarkerFactory(factory.Factory):
 
 class RelatedActivityFactory(factory.Factory):
     ref = "test_ref"
+    type = codelists.RelatedActivityType.parent
 
 class ActivityFactory(factory.Factory):
     iati_identifier = factory.Sequence(lambda n: u'test-act-{0}'.format(n))
