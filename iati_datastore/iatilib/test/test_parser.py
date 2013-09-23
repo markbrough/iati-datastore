@@ -63,9 +63,6 @@ class TestParseActivity(AppTestCase):
             cl.OrganisationRole.funding,
             self.act.participating_orgs[0].role)
 
-    def test_rejects_participatng_org_without_ref(self):
-        self.assertEquals(1, len(self.act.participating_orgs))
-
     def test_recipient_country_percentages(self):
         self.assertEquals(1, len(self.act.recipient_country_percentages))
         self.assertEquals(
@@ -207,7 +204,7 @@ class TestParseActivity(AppTestCase):
 
     def test_default_hierarchy(self):
         activities = [ a for a in parse.document(fixture_filename("default_currency.xml")) ]
-        self.assertEquals(cl.RelatedActivityType.parent, activities[0].hierarchy) 
+        self.assertEquals(1, activities[0].hierarchy)
 
     def test_default_language(self):
         activities = [ a for a in parse.document(fixture_filename("default_currency.xml")) ]
