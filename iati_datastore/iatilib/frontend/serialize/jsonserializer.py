@@ -58,7 +58,7 @@ def json_rep(obj):
             ("participating-org", [json_rep(o) for o in obj.participating_orgs]),
             ("recipient-country", [json_rep(o) for o in obj.recipient_country_percentages]),
             ("sector", [json_rep(o) for o in obj.sector_percentages]),
-            ("budget", {}),
+            ("budget", [json_rep(b) for b in obj.budgets]),
             ("last-change", obj.last_change_datetime),
             ("result", [json_rep(r) for r in obj.results]),
             ("location", [json_rep(l) for l in obj.locations]),
@@ -111,7 +111,7 @@ def json_rep(obj):
             "period-start": obj.period_start,
             "period-end": obj.period_end,
             "value": {
-                "currency": obj.value_currency.value,
+                "currency": code(obj.value_currency),
                 "amount": str(obj.value_amount),
             }
         }
